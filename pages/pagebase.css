@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Rethink Sans";
+  src: url("../../resources/fonts/RethinkSans-VariableFont_wght.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+}
+
 body,
 html {
   width: 100%;

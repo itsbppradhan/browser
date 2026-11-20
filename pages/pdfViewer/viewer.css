@@ -1,8 +1,16 @@
+@font-face {
+  font-family: "Rethink Sans";
+  src: url("../../resources/fonts/RethinkSans-VariableFont_wght.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+}
+
 @media screen {
   html {
     padding: 0;
     margin: 0;
-    font-family: ".SFNSText-Regular", "BlinkMacSystemFont", "Helvetica Neue",
+    font-family: "Rethink Sans", ".SFNSText-Regular", "BlinkMacSystemFont", "Helvetica Neue",
       "Segoe UI", "Arial", sans-serif;
   }
   body {
