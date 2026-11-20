@@ -92,3 +92,4 @@ jobs:
           else
             gh release create "$TAG" dist/* --repo itsbppradhan/browser --generate-notes --verify-tag
           fi
+          gh release edit "$TAG" --repo itsbppradhan/browser --draft=false
