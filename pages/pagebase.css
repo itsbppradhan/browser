@@ -5,7 +5,7 @@ html {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: ".SFNSText-Regular", "Helvetica Neue", "Arial", sans-serif;
+  font-family: "Rethink Sans", ".SFNSText-Regular", "Helvetica Neue", "Arial", sans-serif;
   background-color: #eee;
 }
 /* TODO figure out why the default focus color in Electron is orange */
@@ -32,7 +32,7 @@ body.dark-mode {
 }
 h1 {
   font-size: 2.75em;
-  font-family: ".SFNSDisplay-Light", "Helvetica Neue", "Arial", sans-serif;
+  font-family: "Rethink Sans", ".SFNSDisplay-Light", "Helvetica Neue", "Arial", sans-serif;
   font-weight: normal;
   margin-bottom: 0.25em;
   margin-top: 0;
