@@ -55,7 +55,12 @@ async function afterPackageBuilt (packagePath) {
 
   await installer(options)
     .then(function () {
-      fs.renameSync('./dist/app/biraja-browser-installer' + archSuffix + '/biraja-browser-' + version + '-setup.exe', './dist/app/biraja-browser-' + version + archSuffix + '-setup.exe')
+      const installerDir = './dist/app/biraja-browser-installer' + archSuffix
+      const setupFile = fs.readdirSync(installerDir).find(file => file.toLowerCase().endsWith('-setup.exe') || file.toLowerCase().endsWith('setup.exe'))
+      if (!setupFile) {
+        throw new Error('Could not find the generated Windows setup executable')
+      }
+      fs.renameSync(path.join(installerDir, setupFile), './dist/app/biraja-browser-' + version + archSuffix + '-setup.exe')
     })
     .catch(err => {
       console.error(err, err.stack)
