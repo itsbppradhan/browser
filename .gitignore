@@ -5,5 +5,3 @@
 dist
 main.build.js
 .DS_Store
-package-lock.json
-yarn.lock
