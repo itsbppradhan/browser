@@ -47,7 +47,7 @@ module.exports = function (platform, extraOptions) {
 
     const IS_LINUX = context.electronPlatformName === 'linux'
     const executableName = IS_LINUX
-      ? context.packager.appInfo.productFilename.toLowerCase().replace('-dev', '')
+      ? 'biraja-browser'
       : context.packager.appInfo.productFilename
 
     const electronBinaryPath = path.join(
@@ -136,7 +136,11 @@ module.exports = function (platform, extraOptions) {
     ],
     asar: false,
     afterPack: afterPack,
-    publish: null,
+    publish: {
+      provider: 'github',
+      owner: 'itsbppradhan',
+      repo: 'browser'
+    },
     /*
     Rebuilding native modules that use nan is currently broken for Electron 32+: https://github.com/nodejs/nan/issues/973
     This breaks PDFJS -> canvas, which causes packaging to fail.

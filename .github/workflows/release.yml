@@ -1,0 +1,84 @@
+name: Release Packages
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to release
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            cmd: npm run buildDebian
+            path: dist/app/*.deb
+          - os: ubuntu-latest
+            cmd: npm run buildRedhat
+            path: dist/app/*.rpm
+          - os: ubuntu-latest
+            cmd: npm run buildAppImage
+            path: |
+              dist/app/*.AppImage
+              dist/app/latest-linux.yml
+          - os: windows-latest
+            cmd: npm run buildWindows
+            path: |
+              dist/app/*.zip
+              dist/app/*.exe
+          - os: macos-15
+            cmd: npm run buildMacIntel
+            path: dist/app/*.zip
+          - os: macos-15
+            cmd: npm run buildMacArm
+            path: dist/app/*.zip
+    env:
+      SDKROOT: ${{ matrix.os == 'macos-15' && '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm install --omit=optional
+      - uses: ruby/setup-ruby@v1
+        if: matrix.os == 'ubuntu-latest' && matrix.cmd == 'npm run buildRedhat'
+        with:
+          ruby-version: '3.3'
+      - name: Install system fpm
+        if: matrix.os == 'ubuntu-latest' && matrix.cmd == 'npm run buildRedhat'
+        run: |
+          gem install fpm --no-document
+          echo "USE_SYSTEM_FPM=true" >> "$GITHUB_ENV"
+      - run: ${{ matrix.cmd }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: package-${{ matrix.os }}-${{ strategy.job-index }}
+          path: ${{ matrix.path }}
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: gh release create "$TAG" dist/* --generate-notes --verify-tag

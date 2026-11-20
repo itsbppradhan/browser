@@ -21,6 +21,7 @@ const {
   clipboard,
   ClipboardItem
 } = electron
+const { autoUpdater } = require('electron-updater')
 
 crashReporter.start({
   submitURL: 'https://minbrowser.org/',
@@ -29,7 +30,7 @@ crashReporter.start({
 })
 
 if (process.argv.some(arg => arg === '-v' || arg === '--version')) {
-  console.log('Min: ' + app.getVersion())
+  console.log('Biraja Browser: ' + app.getVersion())
   console.log('Chromium: ' + process.versions.chrome)
   process.exit()
 }
@@ -362,6 +363,14 @@ function createWindowWithBounds (bounds, customArgs) {
 app.on('ready', function () {
   settings.set('restartNow', false)
   appIsReady = true
+
+  if (!isDevelopmentMode) {
+    autoUpdater.autoDownload = true
+    autoUpdater.checkForUpdatesAndNotify()
+    setInterval(function () {
+      autoUpdater.checkForUpdatesAndNotify()
+    }, 12 * 60 * 60 * 1000)
+  }
 
   /* the installer launches the app to install registry items and shortcuts,
   but if that's happening, we shouldn't display anything */

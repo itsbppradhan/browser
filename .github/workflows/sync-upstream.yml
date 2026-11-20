@@ -1,0 +1,46 @@
+name: Sync upstream Min
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * 1'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Merge upstream
+        env:
+          UPSTREAM_REPOSITORY: minbrowser/min
+          BRANCH_NAME: automation/sync-upstream-${{ github.run_id }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add upstream "https://github.com/${UPSTREAM_REPOSITORY}.git"
+          git fetch upstream master
+          git switch -c "$BRANCH_NAME"
+          if ! git merge --no-edit upstream/master; then
+            git merge --abort
+            echo "::error::Upstream changes could not be merged automatically. Resolve the conflicts locally, then push a review branch."
+            exit 1
+          fi
+          git push --set-upstream origin "$BRANCH_NAME"
+
+      - name: Open sync pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH_NAME: automation/sync-upstream-${{ github.run_id }}
+        run: |
+          gh pr create \
+            --base master \
+            --head "$BRANCH_NAME" \
+            --title "Sync upstream Min" \
+            --body "This pull request contains the latest changes from https://github.com/minbrowser/min. Review customization and Electron compatibility before merging."

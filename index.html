@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Security-Policy" content="connect-src *; img-src *; default-src 'self'; base-uri 'none'; form-action 'none'" />
 
-    <title>Min</title>
+    <title>Biraja Browser</title>
 
     <link rel="stylesheet" href="dist/bundle.css" />
     <link rel="stylesheet" href="ext/icons/iconfont.css" />
@@ -202,10 +202,18 @@
       <img id="webview-placeholder" hidden aria-hidden="true" />
       <div id="ntp-content">
           <img id="ntp-background" hidden>
-          <div id="ntp-background-controls">
-            <button id="ntp-image-remove"><i class="i carbon:trash-can"></i></button>
-            <button id="ntp-image-picker"><i class="i carbon:camera"></i></button>
-          </div>
+          <main class="biraja-home" aria-label="Biraja Browser start page">
+            <div class="biraja-home-inner">
+              <p class="biraja-eyebrow">Biraja Browser</p>
+              <h1 class="biraja-title">Where would you like to go?</h1>
+              <nav class="biraja-links" aria-label="Biraja services">
+                <a href="https://git.biraja.me">git.biraja.me</a>
+                <a href="https://tv.biraja.me">tv.biraja.me</a>
+                <a href="https://biraja.me">biraja.me</a>
+                <a href="https://cloud.biraja.me">cloud.biraja.me</a>
+              </nav>
+            </div>
+          </main>
       </div>
     </div>
 

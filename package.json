@@ -1,9 +1,9 @@
 {
-  "name": "min",
-  "productName": "Min",
-  "author": "PalmerAL",
-  "version": "1.35.8",
-  "description": "A fast, minimal browser that protects your privacy",
+  "name": "biraja-browser",
+  "productName": "Biraja Browser",
+  "author": "Biraja",
+  "version": "1.35.8-biraja.1",
+  "description": "A fast, minimal browser for the Biraja ecosystem",
   "electronVersion": "45.3.2",
   "main": "main.build.js",
   "standard": {
@@ -35,6 +35,7 @@
     "dexie": "^3.0.3",
     "dragula": "github:minbrowser/dragula",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-updater": "^6.8.11",
     "expr-eval": "^2.0.2",
     "ipaddr.js": "^2.5.0",
     "node-abi": "^3.8.0",
@@ -87,6 +88,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/minbrowser/min.git"
+    "url": "https://github.com/itsbppradhan/browser.git"
   }
 }

@@ -18,7 +18,9 @@ const newTabPage = {
         newTabPage.background.hidden = true
         newTabPage.hasBackground = false
         document.body.classList.remove('ntp-has-background')
-        newTabPage.deleteBackground.hidden = true
+        if (newTabPage.deleteBackground) {
+          newTabPage.deleteBackground.hidden = true
+        }
       } else {
         const blob = new Blob([data], { type: 'application/octet-binary' })
         const url = URL.createObjectURL(blob)
@@ -28,12 +30,18 @@ const newTabPage = {
         newTabPage.background.hidden = false
         newTabPage.hasBackground = true
         document.body.classList.add('ntp-has-background')
-        newTabPage.deleteBackground.hidden = false
+        if (newTabPage.deleteBackground) {
+          newTabPage.deleteBackground.hidden = false
+        }
       }
     })
   },
   initialize: function () {
     newTabPage.reloadBackground()
+
+    if (!newTabPage.picker) {
+      return
+    }
 
     newTabPage.picker.addEventListener('click', async function () {
       var filePath = await ipc.invoke('showOpenDialog', {

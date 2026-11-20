@@ -1,0 +1,57 @@
+name: Release upstream merge
+
+on:
+  pull_request_target:
+    types:
+      - closed
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Bump fork patch version
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          case "$HEAD_REF" in
+            automation/sync-upstream-*|dependabot/*) ;;
+            *) exit 0 ;;
+          esac
+
+          node <<'NODE'
+          const fs = require('fs')
+          const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+          const match = packageJson.version.match(/^(.+?)-biraja\.(\d+)$/)
+          if (match) {
+            packageJson.version = `${match[1]}-biraja.${Number(match[2]) + 1}`
+          } else {
+            const parts = packageJson.version.split('.')
+            parts[parts.length - 1] = String(Number(parts[parts.length - 1]) + 1)
+            packageJson.version = `${parts.join('.')}-biraja.1`
+          }
+          fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 2) + '\n')
+          console.log(packageJson.version)
+          NODE
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json
+          if [ -f package-lock.json ]; then
+            npm install --package-lock-only --ignore-scripts
+            git add package-lock.json
+          fi
+          VERSION=$(node -p "require('./package.json').version")
+          git commit -m "Release Biraja Browser v${VERSION}"
+          git tag "v${VERSION}"
+          git push origin master
+          git push origin "v${VERSION}"

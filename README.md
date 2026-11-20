@@ -1,6 +1,8 @@
-# Min
+# Biraja Browser
 
-Min is a fast, minimal browser that protects your privacy. It includes an interface designed to minimize distractions, and features such as:
+Biraja Browser is a customized build of Min. Its start page links to Biraja services and is designed around the minimal visual language of [biraja.me](https://biraja.me).
+
+The underlying browser includes features such as:
 
 - Full-text search for visited pages
 - Ad and tracker blocking
@@ -56,6 +58,8 @@ If you want to develop Min:
 - Run `npm install` to install dependencies.
 - Start Min in development mode by running `npm run start`.
 - After you make changes, press `alt+ctrl+r` (or `opt+cmd+r` on Mac) to reload the browser UI.
+
+If this is a custom fork, see [the fork maintenance guide](docs/custom-fork.md) for product rebranding, upstream synchronization, Electron/Chromium updates, and GitHub Releases.
 
 ### Building binaries
 
