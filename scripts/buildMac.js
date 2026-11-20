@@ -19,8 +19,14 @@ function toArch (platform) {
 }
 
 require('./createPackage.js')('mac', { arch: toArch(platform) }).then(function (packagePath) {
+  const appName = fs.readdirSync(packagePath).find(name => name.endsWith('.app'))
+  if (!appName) {
+    throw new Error('Could not find packaged macOS app')
+  }
+  const appPath = path.join(packagePath, appName)
+
   if (platform === 'arm64') {
-    execSync('codesign -s - -a arm64 -f --deep ' + packagePath + '/Biraja Browser.app')
+    execSync('codesign -s - -a arm64 -f --deep "' + appPath + '"')
   }
 
   /* create output directory if it doesn't exist */
@@ -36,7 +42,7 @@ require('./createPackage.js')('mac', { arch: toArch(platform) }).then(function (
     zlib: { level: 9 }
   })
 
-  archive.directory(path.resolve(packagePath, 'Biraja Browser.app'), 'Biraja Browser.app')
+  archive.directory(appPath, appName)
 
   archive.pipe(output)
   archive.finalize()

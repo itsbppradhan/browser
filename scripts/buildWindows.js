@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 const archiver = require('archiver')
 const builder = require('electron-builder')
 const Arch = builder.Arch
@@ -46,6 +47,11 @@ async function afterPackageBuilt (packagePath) {
   console.log('Creating package (this may take a while)')
 
   fs.copyFileSync('LICENSE.txt', packagePath + '/LICENSE')
+
+  const executable = fs.readdirSync(packagePath).find(file => file.endsWith('.exe'))
+  if (executable && executable !== 'biraja-browser.exe') {
+    fs.copyFileSync(path.join(packagePath, executable), path.join(packagePath, 'biraja-browser.exe'))
+  }
 
   await installer(options)
     .then(function () {
