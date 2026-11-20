@@ -1,4 +1,7 @@
 const electron = require('electron')
+const { MicaBrowserWindow, IS_WINDOWS_11 } = process.platform === 'win32'
+  ? require('mica-electron')
+  : { MicaBrowserWindow: null, IS_WINDOWS_11: false }
 const fs = require('fs')
 const fsPromises = require("fs/promises")
 const path = require('path')
@@ -194,7 +197,8 @@ function createWindow (customArgs = {}) {
 }
 
 function createWindowWithBounds (bounds, customArgs) {
-  const newWin = new BaseWindow({
+  const WindowConstructor = process.platform === 'win32' ? MicaBrowserWindow : BaseWindow
+  const newWin = new WindowConstructor({
     width: bounds.width,
     height: bounds.height,
     x: bounds.x,
@@ -206,11 +210,17 @@ function createWindowWithBounds (bounds, customArgs) {
     icon: __dirname + '/icons/icon256.png',
     frame: settings.get('useSeparateTitlebar'),
     alwaysOnTop: settings.get('windowAlwaysOnTop'),
-    backgroundColor: process.platform === 'win32' ? '#00000000' : '#fff',
-    backgroundMaterial: process.platform === 'win32' && !settings.get('useSeparateTitlebar')
-      ? 'mica'
-      : 'none',
+    backgroundColor: process.platform === 'win32' ? '#00ffffff' : '#fff',
+    transparent: process.platform === 'win32' && !settings.get('useSeparateTitlebar'),
   })
+
+  if (process.platform === 'win32' && !settings.get('useSeparateTitlebar')) {
+    if (IS_WINDOWS_11) {
+      newWin.setMicaEffect()
+    } else {
+      newWin.setAcrylic()
+    }
+  }
 
   // windows and linux always use a menu button in the upper-left corner instead
   // if frame: false is set, this won't have any effect, but it does apply on Linux if "use separate titlebar" is enabled
@@ -261,12 +271,19 @@ function createWindowWithBounds (bounds, customArgs) {
   })
 
   mainView.webContents.ipc.on('set-window-material', function (e, material) {
-    if (process.platform !== 'win32' || typeof newWin.setBackgroundMaterial !== 'function') {
+    if (process.platform !== 'win32') {
       return
     }
 
-    if (material === 'mica' || material === 'none') {
-      newWin.setBackgroundMaterial(material)
+    if (material === 'mica' && IS_WINDOWS_11 && typeof newWin.setMicaEffect === 'function') {
+      newWin.setBackgroundColor('#00ffffff')
+      newWin.setMicaEffect()
+    } else if (material === 'none' && typeof newWin.disableDWM === 'function') {
+      newWin.setBackgroundColor('#fff')
+      newWin.disableDWM()
+    } else if (material === 'mica' && typeof newWin.setAcrylic === 'function') {
+      newWin.setBackgroundColor('#00ffffff')
+      newWin.setAcrylic()
     }
   })
 

@@ -38,6 +38,7 @@
     "electron-updater": "^6.8.11",
     "expr-eval": "^2.0.2",
     "ipaddr.js": "^2.5.0",
+    "mica-electron": "^1.5.18",
     "node-abi": "^3.8.0",
     "papaparse": "^5.5.1",
     "pdfjs-dist": "4.2.67",
