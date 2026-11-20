@@ -19,6 +19,12 @@ const newTabPage = {
         newTabPage.background.hidden = true
         newTabPage.hasBackground = false
         document.body.classList.remove('ntp-has-background')
+        if (document.body.classList.contains('is-ntp')) {
+          document.body.classList.add('ntp-mica')
+        }
+        if (window.platformType === 'windows') {
+          ipc.send('set-window-material', 'mica')
+        }
         if (newTabPage.deleteBackground) {
           newTabPage.deleteBackground.hidden = true
         }
@@ -31,6 +37,10 @@ const newTabPage = {
         newTabPage.background.hidden = false
         newTabPage.hasBackground = true
         document.body.classList.add('ntp-has-background')
+        document.body.classList.remove('ntp-mica')
+        if (window.platformType === 'windows') {
+          ipc.send('set-window-material', 'none')
+        }
         if (newTabPage.deleteBackground) {
           newTabPage.deleteBackground.hidden = false
         }

@@ -12,6 +12,24 @@
   padding-right: var(--control-space-right);
 }
 
+body.windows.is-ntp:not(.ntp-has-background) #navbar {
+  background: rgba(248, 248, 248, 0.34) !important;
+  backdrop-filter: blur(18px) saturate(125%);
+}
+
+body.windows.is-ntp:not(.ntp-has-background).dark-mode #navbar {
+  background: rgba(32, 32, 32, 0.34) !important;
+}
+
+body.windows.is-ntp:not(.ntp-has-background) .tab-item.active:not(:only-child) {
+  background: rgba(255, 255, 255, 0.48);
+  border-radius: 8px 8px 0 0;
+}
+
+body.windows.is-ntp:not(.ntp-has-background).dark-mode .tab-item.active:not(:only-child) {
+  background: rgba(255, 255, 255, 0.14);
+}
+
 /* when the tab-group is white, we need a line to separate it from the webviews */
 
 #navbar:before {

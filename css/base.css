@@ -1,6 +1,7 @@
 @font-face {
   font-family: "Rethink Sans";
-  src: url("../resources/fonts/RethinkSans-VariableFont_wght.ttf") format("truetype");
+  src: local("Rethink Sans"), local("RethinkSans"),
+    url("../resources/fonts/RethinkSans-VariableFont_wght.ttf") format("truetype");
   font-style: normal;
   font-weight: 400 800;
   font-display: swap;
@@ -8,7 +9,8 @@
 
 @font-face {
   font-family: "Rethink Sans";
-  src: url("../resources/fonts/RethinkSans-Italic-VariableFont_wght.ttf") format("truetype");
+  src: local("Rethink Sans Italic"), local("RethinkSans-Italic"),
+    url("../resources/fonts/RethinkSans-Italic-VariableFont_wght.ttf") format("truetype");
   font-style: italic;
   font-weight: 400 800;
   font-display: swap;
@@ -19,6 +21,17 @@
   padding: 0;
   box-sizing: border-box;
   font-size: 16px;
+  font-family: "Rethink Sans", ".SFNSText-Regular", "BlinkMacSystemFont",
+    "Helvetica Neue", "Segoe UI", "Arial", sans-serif;
+  font-synthesis: none;
+}
+
+html,
+body,
+button,
+input,
+textarea,
+select {
   font-family: "Rethink Sans", ".SFNSText-Regular", "BlinkMacSystemFont",
     "Helvetica Neue", "Segoe UI", "Arial", sans-serif;
 }

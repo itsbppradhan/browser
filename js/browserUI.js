@@ -223,18 +223,32 @@ function switchToTab (id, options) {
 
   tabEditor.hide()
 
-  if (!tabs.get(id).url) {
+  const isNewTab = !tabs.get(id).url || tabs.get(id).url === urlParser.parse('min://newtab')
+  if (isNewTab) {
     document.body.classList.add('is-ntp')
+    document.body.classList.toggle('ntp-mica', !document.body.classList.contains('ntp-has-background'))
   } else {
     document.body.classList.remove('is-ntp')
+    document.body.classList.remove('ntp-mica')
   }
+
+  syncWindowMaterial(isNewTab)
 }
 
 tasks.on('tab-updated', function (id, key) {
   if (key === 'url' && id === tabs.getSelected()) {
     document.body.classList.remove('is-ntp')
+    document.body.classList.remove('ntp-mica')
+    syncWindowMaterial(false)
   }
 })
+
+function syncWindowMaterial (isNewTab) {
+  if (window.platformType === 'windows') {
+    const useMica = isNewTab && !document.body.classList.contains('ntp-has-background')
+    ipc.send('set-window-material', useMica ? 'mica' : 'none')
+  }
+}
 
 webviews.bindEvent('did-create-popup', function (tabId, popupId, initialURL) {
   var popupTab = tabs.add({

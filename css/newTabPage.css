@@ -27,6 +27,11 @@ body:not(.is-ntp) #ntp-content {
     background: #010101;
 }
 
+body.windows.is-ntp:not(.ntp-has-background) #ntp-content,
+body.windows.is-ntp:not(.ntp-has-background) .biraja-home {
+    background: transparent;
+}
+
 .biraja-home {
     position: absolute;
     inset: 0;

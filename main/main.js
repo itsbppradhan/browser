@@ -206,7 +206,10 @@ function createWindowWithBounds (bounds, customArgs) {
     icon: __dirname + '/icons/icon256.png',
     frame: settings.get('useSeparateTitlebar'),
     alwaysOnTop: settings.get('windowAlwaysOnTop'),
-    backgroundColor: '#fff', // the value of this is ignored, but setting it seems to work around https://github.com/electron/electron/issues/10559
+    backgroundColor: process.platform === 'win32' ? '#00000000' : '#fff',
+    backgroundMaterial: process.platform === 'win32' && !settings.get('useSeparateTitlebar')
+      ? 'mica'
+      : 'none',
   })
 
   // windows and linux always use a menu button in the upper-left corner instead
@@ -255,6 +258,16 @@ function createWindowWithBounds (bounds, customArgs) {
 
   mainView.webContents.ipc.on('set-window-title', function(e, title) {
     newWin.title = title
+  })
+
+  mainView.webContents.ipc.on('set-window-material', function (e, material) {
+    if (process.platform !== 'win32' || typeof newWin.setBackgroundMaterial !== 'function') {
+      return
+    }
+
+    if (material === 'mica' || material === 'none') {
+      newWin.setBackgroundMaterial(material)
+    }
   })
 
   newWin.on('resize', function () {
