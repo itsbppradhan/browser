@@ -39,7 +39,7 @@ async function afterPackageBuilt (packagePath) {
     src: packagePath,
     dest: 'dist/app/biraja-browser-installer' + archSuffix,
     icon: 'icons/icon256.ico',
-    animation: 'icons/windows-installer.gif',
+    animation: 'resources/biraja-windows-installer.gif',
     licenseUrl: 'https://github.com/itsbppradhan/browser/blob/master/LICENSE.txt',
     noMsi: true
   }

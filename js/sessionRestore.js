@@ -80,12 +80,12 @@ const sessionRestore = {
     */
 
     try {
-      // first run, show the tour
+      // first run, open Biraja Browser's home page
       if (!savedStringData) {
         tasks.setSelected(tasks.add()) // create a new task
 
         var newTab = tasks.getSelected().tabs.add({
-            url: 'https://minbrowser.github.io/min/tour'
+            url: 'https://biraja.me'
         })
         browserUI.addTab(newTab, {
          enterEditMode: false
