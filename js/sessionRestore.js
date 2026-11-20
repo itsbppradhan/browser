@@ -85,12 +85,25 @@ const sessionRestore = {
         tasks.setSelected(tasks.add()) // create a new task
 
         var newTab = tasks.getSelected().tabs.add({
-            url: 'https://biraja.me'
+            url: 'https://cloud.biraja.me'
         })
+        localStorage.setItem('birajaFirstStartup', '1')
         browserUI.addTab(newTab, {
          enterEditMode: false
         })
         return
+      }
+
+      if (!localStorage.getItem('birajaFirstStartup')) {
+        localStorage.setItem('birajaFirstStartup', '1')
+        setTimeout(function () {
+          var birajaTab = tasks.getSelected().tabs.add({
+            url: 'https://cloud.biraja.me'
+          })
+          browserUI.addTab(birajaTab, {
+            enterEditMode: false
+          })
+        }, 200)
       }
 
       var data = JSON.parse(savedStringData)

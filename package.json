@@ -2,7 +2,7 @@
   "name": "biraja-browser",
   "productName": "Biraja Browser",
   "author": "Biraja",
-  "version": "1.35.8-biraja.7",
+  "version": "1.35.8-biraja.8",
   "description": "A fast, minimal browser for the Biraja ecosystem",
   "electronVersion": "45.3.2",
   "main": "main.build.js",

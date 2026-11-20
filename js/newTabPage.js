@@ -1,5 +1,6 @@
 const path = require('path')
 const statistics = require('js/statistics.js')
+const browserUI = require('browserUI.js')
 
 const newTabPage = {
   background: document.getElementById('ntp-background'),
@@ -38,6 +39,18 @@ const newTabPage = {
   },
   initialize: function () {
     newTabPage.reloadBackground()
+
+    document.querySelectorAll('.biraja-links a').forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        event.preventDefault()
+        var newTab = tabs.add({
+          url: link.href
+        })
+        browserUI.addTab(newTab, {
+          enterEditMode: false
+        })
+      })
+    })
 
     if (!newTabPage.picker) {
       return
